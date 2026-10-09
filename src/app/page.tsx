@@ -6,6 +6,8 @@ export default function Home() {
   const [currentDate, setCurrentDate] = useState("");
   const [isExporting, setIsExporting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [isLoadingResults, setIsLoadingResults] = useState(false);
+  const [loadingStepText, setLoadingStepText] = useState("Menganalisis vibe keuangan...");
   
   // Onboarding State
   const [showOnboarding, setShowOnboarding] = useState(true);
@@ -127,6 +129,27 @@ export default function Home() {
     return Number(clean).toLocaleString("id-ID");
   };
 
+  // LOADING SCREEN SIMULATION (3 SECONDS)
+  const handleTriggerLoadingAndShowResults = () => {
+    setIsLoadingResults(true);
+    triggerFeedback("success");
+    setLoadingStepText("Menghitung rasio pos pengeluaran...");
+
+    setTimeout(() => {
+      setLoadingStepText("Mencocokkan dengan Micro-Asset Antam & Saham...");
+    }, 1000);
+
+    setTimeout(() => {
+      setLoadingStepText("Menyiapkan Vibe Status & Story Card...");
+    }, 2000);
+
+    setTimeout(() => {
+      setIsLoadingResults(false);
+      setWizardStep(11);
+      triggerFeedback("success");
+    }, 3000);
+  };
+
   const handleExportAction = async (actionType: "download" | "share") => {
     if (!storyRef.current) return;
     setIsExporting(true);
@@ -204,7 +227,6 @@ export default function Home() {
     desc: "Alokasi pos dasar lu aman. Pertahankan disiplin keuangan ini!", 
     emoji: "🌱",
     color: "bg-emerald-500/15 border-emerald-500/40 text-emerald-300 shadow-[0_0_20px_rgba(52,211,153,0.15)]", 
-    level: 1 
   };
   if (flexPos > survivalPos) {
     tierBadge = { 
@@ -212,7 +234,6 @@ export default function Home() {
       desc: "Pos gaya hidup lebih besar dari survival. Waktunya ngerem khilaf bulanan!", 
       emoji: "⚡",
       color: "bg-purple-500/15 border-purple-500/40 text-purple-300 shadow-[0_0_20px_rgba(168,85,247,0.15)]", 
-      level: 3 
     };
   } else if (totalYearlyBurn > 120000000) {
     tierBadge = { 
@@ -220,7 +241,6 @@ export default function Home() {
       desc: "Burn rate tahunan tinggi tapi rasio cashflow masih ketolong pemasukan.", 
       emoji: "🥂",
       color: "bg-rose-500/15 border-rose-500/40 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.15)]", 
-      level: 4 
     };
   }
 
@@ -317,6 +337,26 @@ export default function Home() {
       
       {/* AMBIENT GLOW */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+      {/* LOADING OVERLAY SCREEN (3 SECONDS) */}
+      {isLoadingResults && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-in fade-in duration-300">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-[2.5rem] p-8 max-w-sm w-full space-y-6 text-center shadow-2xl">
+            <div className="relative w-16 h-16 mx-auto">
+              <div className="absolute inset-0 border-4 border-emerald-500/20 rounded-full"></div>
+              <div className="absolute inset-0 border-4 border-emerald-400 rounded-full animate-spin border-t-transparent"></div>
+              <div className="absolute inset-0 flex items-center justify-center text-xl">⚡</div>
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-base font-black text-white">Memproses Vibe Ecosystem</h3>
+              <p className="text-xs text-emerald-400 font-semibold animate-pulse">{loadingStepText}</p>
+            </div>
+            <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+              <div className="bg-emerald-400 h-full animate-[pulse_1s_infinite]" style={{ width: "75%" }}></div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ONBOARDING MODAL */}
       {showOnboarding && (
@@ -682,7 +722,7 @@ export default function Home() {
             </div>
             <div className="flex gap-2 pt-2">
               <button onClick={() => { setWizardStep(9); setErrorMsg(""); triggerFeedback("tap"); }} className="flex-1 py-3.5 border border-zinc-800 text-zinc-300 font-bold text-xs uppercase rounded-xl">Kembali</button>
-              <button onClick={() => { setWizardStep(11); setErrorMsg(""); triggerFeedback("success"); }} className="flex-1 py-3.5 bg-emerald-400 text-black font-black text-xs uppercase rounded-xl shadow-lg">Lihat Hasil ⚡</button>
+              <button onClick={handleTriggerLoadingAndShowResults} className="flex-1 py-3.5 bg-emerald-400 text-black font-black text-xs uppercase rounded-xl shadow-lg">Lihat Hasil ⚡</button>
             </div>
           </div>
         )}
@@ -865,18 +905,18 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* FIXED BREAKDOWN POS LABELS & PERCENTAGE */}
-                  <div className={`${currentTemplateStyle.itemList} rounded-xl p-2 space-y-1 text-left`}>
-                    <span className={`text-[8px] font-black ${currentTemplateStyle.accentColor} uppercase tracking-widest block text-center border-b border-white/10 pb-0.5`}>
-                      ✨ Komposisi Vibe Keuangan:
+                  {/* SHORTENED LABELS TO PREVENT CUTOFF IN HTML-TO-IMAGE */}
+                  <div className={`${currentTemplateStyle.itemList} rounded-xl p-2 space-y-1.5 text-left`}>
+                    <span className={`text-[8px] font-black ${currentTemplateStyle.accentColor} uppercase tracking-widest block text-center border-b border-white/10 pb-1`}>
+                      ✨ Komposisi Vibe Keuangan (%):
                     </span>
                     {[
-                      { name: "Pos Survival (Dasar)", pct: survivalPct, emoji: "🌱" },
-                      { name: "Pos Gengsi & Flex", pct: flexPct, emoji: "🔥" },
-                      { name: "Pos Masa Depan", pct: futurePct, emoji: "🚀" }
+                      { name: "Survival", pct: survivalPct, emoji: "🌱" },
+                      { name: "Gengsi & Flex", pct: flexPct, emoji: "🔥" },
+                      { name: "Masa Depan", pct: futurePct, emoji: "🚀" }
                     ].map((item, idx) => (
                       <div key={idx} className="flex justify-between items-center text-[10px] font-black">
-                        <span className="truncate pr-1">{item.emoji} {item.name}</span>
+                        <span className="flex items-center gap-1 truncate pr-1">{item.emoji} {item.name}</span>
                         <span className={`${currentTemplateStyle.accentColor} whitespace-nowrap`}>{item.pct}%</span>
                       </div>
                     ))}
