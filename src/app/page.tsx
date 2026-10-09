@@ -189,6 +189,11 @@ export default function Home() {
   const totalMonthlyBurn = Math.round(totalYearlyBurn / 12);
   const totalWeeklyBurn = Math.round(totalYearlyBurn / 52);
 
+  // PERCENTAGE CALCULATIONS FOR STORY CARD
+  const survivalPct = totalYearlyBurn > 0 ? Math.round((survivalPos / totalYearlyBurn) * 100) : 0;
+  const flexPct = totalYearlyBurn > 0 ? Math.round((flexPos / totalYearlyBurn) * 100) : 0;
+  const futurePct = totalYearlyBurn > 0 ? Math.max(0, 100 - survivalPct - flexPct) : 0;
+
   const monthlyIncomeNum = parseNumber(answers.monthlyIncome);
   const yearlyIncomeNum = monthlyIncomeNum * 12;
   const savingsRate = yearlyIncomeNum > 0 ? Math.max(0, Math.round(((yearlyIncomeNum - totalYearlyBurn) / yearlyIncomeNum) * 100)) : 0;
@@ -869,18 +874,19 @@ export default function Home() {
                     </div>
                   </div>
 
+                  {/* BREAKDOWN POS MENGGUNAKAN PERSENTASE (%) AGAR AMAN & PRIVACY-FRIENDLY */}
                   <div className={`${currentTemplateStyle.itemList} rounded-xl p-2 space-y-1 text-left`}>
                     <span className={`text-[8px] font-black ${currentTemplateStyle.accentColor} uppercase tracking-widest block text-center border-b border-white/10 pb-0.5`}>
-                      ✨ Breakdown Pos Keuangan Setahun:
+                      ✨ Komposisi Vibe Keuangan (%):
                     </span>
                     {[
-                      { name: "Pos Survival (Dasar)", price: survivalPos, emoji: "🌱" },
-                      { name: "Pos Gengsi & Flex", price: flexPos, emoji: "🔥" },
-                      { name: "Pos Masa Depan", price: futurePos > 0 ? futurePos : 100000, emoji: "🚀" }
+                      { name: "Pos Survival (Dasar)", pct: survivalPct, emoji: "🌱" },
+                      { name: "Pos Gengsi & Flex", pct: flexPct, emoji: "🔥" },
+                      { name: "Pos Masa Depan", pct: futurePct, emoji: "🚀" }
                     ].map((item, idx) => (
                       <div key={idx} className="flex justify-between items-center text-[10px] font-bold">
                         <span className="line-clamp-1">{item.emoji} {item.name}</span>
-                        <span className={currentTemplateStyle.accentColor}>Rp {item.price.toLocaleString("id-ID")}</span>
+                        <span className={currentTemplateStyle.accentColor}>{item.pct}%</span>
                       </div>
                     ))}
                   </div>
@@ -898,10 +904,10 @@ export default function Home() {
             </div>
 
             <div className="space-y-2 pt-1">
-              <button onClick={() => handleExportAction("share")} disabled={isExporting} className="w-full py-4 bg-emerald-400 hover:bg-emerald-300 text-black font-black text-xs uppercase tracking-wider rounded-2xl shadow-xl transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2">
+              <button onClick={() => { handleExportAction("share"); }} disabled={isExporting} className="w-full py-4 bg-emerald-400 hover:bg-emerald-300 text-black font-black text-xs uppercase tracking-wider rounded-2xl shadow-xl transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2">
                 {isExporting ? "Memproses..." : `🚀 Share Budgeting BUNG! ke IG / WA`}
               </button>
-              <button onClick={() => handleExportAction("download")} disabled={isExporting} className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-xs uppercase tracking-wider rounded-2xl transition-all active:scale-95 disabled:opacity-50">
+              <button onClick={() => { handleExportAction("download"); }} disabled={isExporting} className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-xs uppercase tracking-wider rounded-2xl transition-all active:scale-95 disabled:opacity-50">
                 📥 Download Card Saja
               </button>
             </div>
