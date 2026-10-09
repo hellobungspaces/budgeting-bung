@@ -874,7 +874,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* BREAKDOWN POS MENGGUNAKAN PERSENTASE (%) AGAR AMAN & PRIVACY-FRIENDLY */}
+                  {/* BREAKDOWN POS MENGGUNAKAN PERSENTASE (%) */}
                   <div className={`${currentTemplateStyle.itemList} rounded-xl p-2 space-y-1 text-left`}>
                     <span className={`text-[8px] font-black ${currentTemplateStyle.accentColor} uppercase tracking-widest block text-center border-b border-white/10 pb-0.5`}>
                       ✨ Komposisi Vibe Keuangan (%):
@@ -904,10 +904,10 @@ export default function Home() {
             </div>
 
             <div className="space-y-2 pt-1">
-              <button onClick={() => { handleExportAction("share"); }} disabled={isExporting} className="w-full py-4 bg-emerald-400 hover:bg-emerald-300 text-black font-black text-xs uppercase tracking-wider rounded-2xl shadow-xl transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2">
+              <button onClick={() => handleExportAction("share")} disabled={isExporting} className="w-full py-4 bg-emerald-400 hover:bg-emerald-300 text-black font-black text-xs uppercase tracking-wider rounded-2xl shadow-xl transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2">
                 {isExporting ? "Memproses..." : `🚀 Share Budgeting BUNG! ke IG / WA`}
               </button>
-              <button onClick={() => { handleExportAction("download"); }} disabled={isExporting} className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-xs uppercase tracking-wider rounded-2xl transition-all active:scale-95 disabled:opacity-50">
+              <button onClick={() => handleExportAction("download")} disabled={isExporting} className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-bold text-xs uppercase tracking-wider rounded-2xl transition-all active:scale-95 disabled:opacity-50">
                 📥 Download Card Saja
               </button>
             </div>
