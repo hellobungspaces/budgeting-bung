@@ -199,15 +199,6 @@ export default function Home() {
   const savingsRate = yearlyIncomeNum > 0 ? Math.max(0, Math.round(((yearlyIncomeNum - totalYearlyBurn) / yearlyIncomeNum) * 100)) : 0;
   const expenseRate = yearlyIncomeNum > 0 ? Math.min(100, Math.max(0, 100 - savingsRate)) : 0;
 
-  let funnyTitle = `🛒 ${answers.userName || "Sultan"} Titipan Indomaret`;
-  if (flexPos > survivalPos) {
-    funnyTitle = `🔥 Budak Gengsi & Weekend Warrior`;
-  } else if (totalMonthlyBurn < 3000000) {
-    funnyTitle = `🥶 Anak Rantau Berdarah Dingin`;
-  } else if (expenseRate > 80) {
-    funnyTitle = `💀 Tim Gaji Numpang Lewat`;
-  }
-
   let tierBadge = { 
     title: "Pejuang Survival & Mindfulness", 
     desc: "Alokasi pos dasar lu aman. Pertahankan disiplin keuangan ini!", 
@@ -874,19 +865,19 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* BREAKDOWN POS MENGGUNAKAN PERSENTASE (%) */}
+                  {/* FIXED BREAKDOWN POS LABELS & PERCENTAGE */}
                   <div className={`${currentTemplateStyle.itemList} rounded-xl p-2 space-y-1 text-left`}>
                     <span className={`text-[8px] font-black ${currentTemplateStyle.accentColor} uppercase tracking-widest block text-center border-b border-white/10 pb-0.5`}>
-                      ✨ Komposisi Vibe Keuangan (%):
+                      ✨ Komposisi Vibe Keuangan:
                     </span>
                     {[
                       { name: "Pos Survival (Dasar)", pct: survivalPct, emoji: "🌱" },
                       { name: "Pos Gengsi & Flex", pct: flexPct, emoji: "🔥" },
                       { name: "Pos Masa Depan", pct: futurePct, emoji: "🚀" }
                     ].map((item, idx) => (
-                      <div key={idx} className="flex justify-between items-center text-[10px] font-bold">
-                        <span className="line-clamp-1">{item.emoji} {item.name}</span>
-                        <span className={currentTemplateStyle.accentColor}>{item.pct}%</span>
+                      <div key={idx} className="flex justify-between items-center text-[10px] font-black">
+                        <span className="truncate pr-1">{item.emoji} {item.name}</span>
+                        <span className={`${currentTemplateStyle.accentColor} whitespace-nowrap`}>{item.pct}%</span>
                       </div>
                     ))}
                   </div>
